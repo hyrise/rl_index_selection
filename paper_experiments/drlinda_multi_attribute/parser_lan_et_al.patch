@@ -1,0 +1,92 @@
+diff --git a/Utility/ParserForIndex.py b/Utility/ParserForIndex.py
+index bd90665..0ff6cf6 100644
+--- a/Utility/ParserForIndex.py
++++ b/Utility/ParserForIndex.py
+@@ -157,6 +157,8 @@ class Parser:
+         if alias_name in self.table_info.keys():
+             # subquery/sublink
+             return
++        if table_name not in self.db_info:
++            return
+         self.table_info[alias_name] = Table(table_name, alias_name, True)
+         self.table_info[alias_name].set_columns(self.db_info[table_name])
+ 
+@@ -185,6 +187,8 @@ class Parser:
+                 if col_name in self.table_info[t].columns.keys():
+                     return t, self.table_info[t].columns[col_name].is_origin
+         else:
++            if t_n not in self.table_info or col_name not in self.table_info[t_n].columns:
++                return "", False
+             col_info = self.table_info[t_n].columns[col_name]
+             return table_name, col_info.is_origin
+         return "", False
+@@ -199,12 +203,14 @@ class Parser:
+             if len(column_ref['fields']) == 1:
+                 col_name1 = column_ref['fields'][0]['String']['str']
+                 table_name1, is_o = self.is_original_column("", col_name1)
+-                self.table_info[table_name1].add_used_column(col_name1)
++                if table_name1 in self.table_info:
++                    self.table_info[table_name1].add_used_column(col_name1)
+             else:
+                 col_name1 = column_ref['fields'][1]['String']['str']
+                 table_name1, is_o = self.is_original_column(column_ref['fields'][0]['String']['str'],
+                                                             col_name1)
+-                self.table_info[table_name1].add_used_column(col_name1)
++                if table_name1 in self.table_info:
++                    self.table_info[table_name1].add_used_column(col_name1)
+ 
+         elif 'A_Const' in expr.keys():
+             etype = 1
+@@ -224,7 +230,8 @@ class Parser:
+             detial = expr['TypeCast']
+             type_name = detial['typeName']
+             value_type1 = type_name['TypeName']['names'][0]['String']['str']
+-            value1 = detial['arg']['A_Const']['val']['String']['str']
++            if 'A_Const' in detial['arg']:
++                value1 = detial['arg']['A_Const']['val']['String']['str']
+         elif 'SubLink' in expr.keys():
+             etype = 1
+             is_o = True
+@@ -294,6 +301,8 @@ class Parser:
+     def parse_fun_call(self, fun_call, is_in_or, is_target):
+         if 'agg_star' in fun_call.keys():
+             return
++        if 'args' not in fun_call:
++            return
+         args = fun_call['args']
+         for i in range(len(args)):
+             if 'ColumnRef' in args[i].keys():
+@@ -314,7 +323,8 @@ class Parser:
+         else:
+             table_name = column_info['fields'][0]['String']['str']
+             col_name = column_info['fields'][1]['String']['str']
+-            self.table_info[table_name].add_used_column(col_name)
++            if table_name in self.table_info:
++                self.table_info[table_name].add_used_column(col_name)
+ 
+     def parse_res_target(self, res_target):
+         # name in target, we do not need to consider. because it is for users.
+@@ -405,7 +415,7 @@ class Parser:
+                         else:
+                             col_name1 = column_ref['fields'][1]['String']['str']
+                             table_name1 = column_ref['fields'][0]['String']['str']
+-                            if not self.table_info[table_name1].is_origin:
++                            if table_name1 not in self.table_info or not self.table_info[table_name1].is_origin:
+                                 return
+                             self.table_info[table_name1].add_used_column(col_name1)
+                             columns[col_name1] = index
+@@ -432,9 +442,13 @@ class Parser:
+                             self.table_info[table_name1].add_used_column(col_name1)
+                             columns[col_name1] = index
+                             index += 1
+-        self.table_info[which_table].order = columns
++        if which_table in self.table_info:
++            self.table_info[which_table].order = columns
+ 
+     def parse_select(self, select_stmt):
++        if 'fromClause' not in select_stmt:
++            return
++
+         # (1)parse from
+         from_clause = select_stmt['fromClause']
+         self.parse_from_clause(from_clause)

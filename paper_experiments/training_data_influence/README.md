@@ -1,12 +1,10 @@
 # Training Data Influence Experiments
 
-*This file contains additional material for the [paper](../../README.md) corresponding to this repository. The material is not part of the paper due to space restrictions.*
-
 With the following experiments, we conduct training data influence studies that investigate the impact of different parameters on the agent's performance. The parameters include the number of unknown query templates and, if the number of unknown templates is fixed, how the selection of unknown templates can affect the performance.
 
 ## Experiment 1 - Impact of the number of unknown query templates
 
-The following experiment examines how well the agent is able to generalize to unseen workloads depending on the number of unknown query templates during training. The experiment's corresponding JSON files can be found in the [experiment_1](https://gitfront.io/r/bensk1/95c39d15438310f5860255750b4d2f05b1027358/SWIRL/tree/paper_experiments/training_data_influence/experiment_1/) folder for reproduction or further investigation.
+The following experiment examines how well the agent is able to generalize to unseen workloads depending on the number of unknown query templates during training. The experiment's corresponding JSON files can be found in the [experiment_1](./experiment_1/) folder for reproduction or further investigation.
 
 ### Experiment settings
 
@@ -45,7 +43,7 @@ ____________________
 
 ## Experiment 2 - Impact of the particular selection of unknown queries
 
-With the following experiment, we want to investigate whether - for a sufficiently large workload/set of query templates - the agent's performance strongly depends on a well-selected set of unknown queries during training. The corresponding JSON files can be found in the [experiment_2](https://gitfront.io/r/bensk1/95c39d15438310f5860255750b4d2f05b1027358/SWIRL/tree/paper_experiments/training_data_influence/experiment_2/) folder for reproduction or further investigation.
+With the following experiment, we want to investigate whether - for a sufficiently large workload/set of query templates - the agent's performance strongly depends on a well-selected set of unknown queries during training. The corresponding JSON files can be found in the [experiment_2](./experiment_2/) folder for reproduction or further investigation.
 
 
 ### Experiment settings
