@@ -1,0 +1,61 @@
+{
+  "id": "tpch_wl_5_width_3_exclude_0",
+  "description": "The experiment configuration for experiment 1 of the ablation studies",
+  "gym_version": 1,
+  "timesteps": 100000,
+  "random_seed": 60,
+  "parallel_environments": 1,
+  "pickle_cost_estimation_caches": true,
+  "action_manager": "MultiColumnIndexActionManager",
+  "observation_manager": "SingleColumnIndexObservationManager",
+  "reward_calculator": "RelativeDifferenceRelativeToStorageReward",
+  "max_steps_per_episode": 200,
+  "validation_frequency": 4000,
+  "filter_utilized_columns": false,
+  "max_index_width": 3,
+  "reenable_indexes": false,
+  "result_path": "paper_experiments/ablation_studies/experiment_1",
+  "workload_embedder": {
+    "type": "PlanEmbedderLSIBOW",
+    "representation_size": 50
+  },
+  "rl_algorithm": {
+    "algorithm": "PPO2",
+    "stable_baselines_version": 2,
+    "gamma": 0.5,
+    "policy": "MlpPolicy",
+    "model_architecture": {
+      "net_arch": [
+        {
+          "vf": [256,256],
+          "pi": [256,256]
+        }
+      ]
+    },
+    "args": {
+      "n_steps": 64
+    }
+  },
+  "workload": {
+    "benchmark": "TPCH",
+    "scale_factor": 10,
+    "size": 5,
+    "varying_frequencies": true,
+    "training_instances": 2000,
+    "validation_testing": {
+      "number_of_workloads": 50,
+      "unknown_query_probabilities": [0.0]
+    },
+    "similar_workloads": false,
+    "excluded_query_classes": [2,17,20],
+    "unknown_queries": 0
+  },
+  "comparison_algorithms": ["extend","db2advis"],
+  "budgets": {
+    "training": false,
+    "validation_and_testing": [500, 1500, 3000, 5000, 8000]
+  },
+  "column_filters": {
+    "TableNumRowsFilter": 10000
+  }
+}
