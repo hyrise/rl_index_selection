@@ -13,7 +13,7 @@
   "validation_frequency": 4000,
   "filter_utilized_columns": false,
   "max_index_width": 3,
-  "result_path": "paper_experiments/ablation_studies/experiment_2",
+  "result_path": "experiments/ablation_studies/experiment_2",
   "reenable_indexes": false,
   "workload_embedder": {
     "type": "PlanEmbedderLSIBOW",

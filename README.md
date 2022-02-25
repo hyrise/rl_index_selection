@@ -9,7 +9,7 @@ If you have any questions regarding the paper, please contact Jan Kossmann via j
 
 This repository will also contain a reimplementation of the reinforcement learning index selection approach DRLinda based on Sadri et al.'s publications shown below. The reimplementation consists of the following classes: `DRLindaActionManager` in *action_manager.py*, `DRLindaObservationManager` in *observation_manager.py*, `DRLindaReward` in *reward_calculator.py*, and a specialized environment in */gym_db/envs/db_env_v3.py*. Results of comparisons with DRLinda are presented in the paper.
 
-We describe our attempt to DRLinda with Lan et al.'s solution to achieve multi-attribute index support in [paper_experiments/drlinda_multi_attribute/](paper_experiments/drlinda_multi_attribute/).
+We describe our attempt to DRLinda with Lan et al.'s solution to achieve multi-attribute index support in [experiments/drlinda_multi_attribute/](experiments/drlinda_multi_attribute/).
 
 
 ## Referenced publications

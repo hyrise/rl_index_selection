@@ -14,7 +14,7 @@
   "filter_utilized_columns": false,
   "max_index_width": 3,
   "reenable_indexes": false,
-  "result_path": "paper_experiments/ablation_studies/experiment_1",
+  "result_path": "experiments/ablation_studies/experiment_1",
   "workload_embedder": {
     "type": "PlanEmbedderLSIBOW",
     "representation_size": 50
