@@ -85,7 +85,7 @@ class Experiment(object):
 
         if "workload_embedder" in self.config:
             workload_embedder_class = getattr(
-                importlib.import_module("workload_embedder"), self.config["workload_embedder"]["type"]
+                importlib.import_module("swirl.workload_embedder"), self.config["workload_embedder"]["type"]
             )
             workload_embedder_connector = PostgresDatabaseConnector(self.schema.database_name, autocommit=True)
             self.workload_embedder = workload_embedder_class(
@@ -230,9 +230,10 @@ class Experiment(object):
         ), f"Folder for experiment results should exist at: ./{self.EXPERIMENT_RESULT_PATH}"
 
         self.experiment_folder_path = f"{self.EXPERIMENT_RESULT_PATH}/ID_{self.id}"
-        assert (
-            os.path.isdir(self.experiment_folder_path) is False
-        ), f"Experiment folder already exists at: ./{self.experiment_folder_path}"
+        assert os.path.isdir(self.experiment_folder_path) is False, (
+            f"Experiment folder already exists at: ./{self.experiment_folder_path} - "
+            "terminating here because we don't want to overwrite anything."
+        )
 
         os.mkdir(self.experiment_folder_path)
 
@@ -526,11 +527,11 @@ class Experiment(object):
                     }
                     extend_connector = PostgresDatabaseConnector(self.schema.database_name, autocommit=True)
                     extend_connector.drop_indexes()
-                    e = ExtendAlgorithm(extend_connector, parameters)
-                    indexes = e.calculate_best_indexes(model_performance["evaluated_workload"])
+                    extend_algorithm = ExtendAlgorithm(extend_connector, parameters)
+                    indexes = extend_algorithm.calculate_best_indexes(model_performance["evaluated_workload"])
                     self.comparison_indexes["Extend"] |= frozenset(indexes)
 
-                    self.comparison_performances[run_type]["Extend"][-1].append(e.final_share)
+                    self.comparison_performances[run_type]["Extend"][-1].append(extend_algorithm.final_cost_proportion)
 
     def _compare_db2advis(self):
         for model_performances_outer, run_type in [self.test_model(self.model), self.validate_model(self.model)]:
@@ -544,11 +545,13 @@ class Experiment(object):
                     }
                     db2advis_connector = PostgresDatabaseConnector(self.schema.database_name, autocommit=True)
                     db2advis_connector.drop_indexes()
-                    e = DB2AdvisAlgorithm(db2advis_connector, parameters)
-                    indexes = e.calculate_best_indexes(model_performance["evaluated_workload"])
+                    db2advis_algorithm = DB2AdvisAlgorithm(db2advis_connector, parameters)
+                    indexes = db2advis_algorithm.calculate_best_indexes(model_performance["evaluated_workload"])
                     self.comparison_indexes["DB2Adv"] |= frozenset(indexes)
 
-                    self.comparison_performances[run_type]["DB2Adv"][-1].append(e.final_share)
+                    self.comparison_performances[run_type]["DB2Adv"][-1].append(
+                        db2advis_algorithm.final_cost_proportion
+                    )
 
                     self.evaluated_workloads_strs.append(f"{model_performance['evaluated_workload']}\n")
 
@@ -607,7 +610,9 @@ class Experiment(object):
 
     def make_env(self, env_id, environment_type=EnvironmentType.TRAINING, workloads_in=None):
         def _init():
-            action_manager_class = getattr(importlib.import_module("action_manager"), self.config["action_manager"])
+            action_manager_class = getattr(
+                importlib.import_module("swirl.action_manager"), self.config["action_manager"]
+            )
             action_manager = action_manager_class(
                 indexable_column_combinations=self.globally_indexable_columns,
                 action_storage_consumptions=self.action_storage_consumptions,
@@ -625,7 +630,7 @@ class Experiment(object):
                 "workload_size": self.config["workload"]["size"],
             }
             observation_manager_class = getattr(
-                importlib.import_module("observation_manager"), self.config["observation_manager"]
+                importlib.import_module("swirl.observation_manager"), self.config["observation_manager"]
             )
             observation_manager = observation_manager_class(
                 action_manager.number_of_columns, observation_manager_config
@@ -635,7 +640,7 @@ class Experiment(object):
                 self.number_of_features = observation_manager.number_of_features
 
             reward_calculator_class = getattr(
-                importlib.import_module("reward_calculator"), self.config["reward_calculator"]
+                importlib.import_module("swirl.reward_calculator"), self.config["reward_calculator"]
             )
             reward_calculator = reward_calculator_class()
 
@@ -685,6 +690,8 @@ class Experiment(object):
             self.VecNormalize = VecNormalize_sb2
             self.sync_envs_normalization = sync_envs_normalization_sb2
         elif self.config["rl_algorithm"]["stable_baselines_version"] == 3:
+            raise ValueError("Currently, only StableBaselines 2 is supported.")
+
             from stable_baselines3.common.evaluation import evaluate_policy as evaluate_policy_sb3
             from stable_baselines3.common.utils import set_random_seed as set_random_seed_sb3
             from stable_baselines3.common.vec_env import DummyVecEnv as DummyVecEnv_sb3
@@ -697,4 +704,4 @@ class Experiment(object):
             self.VecNormalize = VecNormalize_sb3
             self.sync_envs_normalization = sync_envs_normalization_sb3
         else:
-            raise ValueError
+            raise ValueError("There are only versions 2 and 3 of StableBaselines.")
