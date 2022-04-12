@@ -1,8 +1,8 @@
+import copy
 import logging
 
 import numpy as np
 from gym import spaces
-import copy
 
 from index_selection_evaluation.selection.utils import b_to_mb
 
@@ -163,7 +163,6 @@ class DRLindaActionManager(ActionManager):
 
     def _valid_actions_based_on_last_action(self, last_action):
         pass
-
 
 
 class MultiColumnIndexActionManager(ActionManager):

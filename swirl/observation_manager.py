@@ -253,6 +253,7 @@ class UnknownQueriesObservationManager(ObservationManager):
 
         return observation
 
+
 class DRLindaObservationManager(ObservationManager):
     def __init__(self, number_of_actions, config):
         ObservationManager.__init__(self, number_of_actions)
@@ -263,18 +264,20 @@ class DRLindaObservationManager(ObservationManager):
         # these attributes.
         self.number_of_features = (
             self.number_of_actions  # Indicates for each action whether it was taken or not, i.e. index configuration
-            + (self.number_of_query_classes * self.number_of_actions) # Workload matrix. k X m in the paper
-            + (self.number_of_actions) # Access Vector, i.e., number of accesses to each indexable attribute
+            + (self.number_of_query_classes * self.number_of_actions)  # Workload matrix. k X m in the paper
+            + (self.number_of_actions)  # Access Vector, i.e., number of accesses to each indexable attribute
         )
 
         self._workload_matrix = None
         self._access_vector = None
 
     def _update_episode_fix_data(self, state_fix_for_episode):
-        self._workload_matrix = [[0 for m in range(self.number_of_actions)] for k in range(self.number_of_query_classes)]
+        self._workload_matrix = [
+            [0 for m in range(self.number_of_actions)] for k in range(self.number_of_query_classes)
+        ]
         self._access_vector = [0 for m in range(self.number_of_actions)]
 
-        for query in state_fix_for_episode['workload'].queries:
+        for query in state_fix_for_episode["workload"].queries:
             # Account for zero indexing
             query_id = query.nr - 1
             for column in query.columns:
@@ -282,7 +285,6 @@ class DRLindaObservationManager(ObservationManager):
                     continue
                 self._workload_matrix[query_id][column.global_column_id] = 1
                 self._access_vector[column.global_column_id] += query.frequency
-
 
     def init_episode(self, state_fix_for_episode):
         super()._init_episode(state_fix_for_episode)

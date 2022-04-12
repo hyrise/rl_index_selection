@@ -10,15 +10,15 @@ import subprocess
 
 import gym
 import numpy as np
-
 import utils
 from configuration_parser import ConfigurationParser
+from schema import Schema
+from workload_generator import WorkloadGenerator
+
 from gym_db.common import EnvironmentType
 from index_selection_evaluation.selection.algorithms.db2advis_algorithm import DB2AdvisAlgorithm
 from index_selection_evaluation.selection.algorithms.extend_algorithm import ExtendAlgorithm
 from index_selection_evaluation.selection.dbms.postgres_dbms import PostgresDatabaseConnector
-from schema import Schema
-from workload_generator import WorkloadGenerator
 
 
 class Experiment(object):

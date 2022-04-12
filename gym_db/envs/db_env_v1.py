@@ -112,7 +112,7 @@ class DBEnvV1(gym.Env):
             "memory_consumption": self.current_storage_consumption,
             "available_budget": self.current_budget,
             "evaluated_workload": self.current_workload,
-            "indexes": self.current_indexes
+            "indexes": self.current_indexes,
         }
 
         output = (
@@ -189,7 +189,11 @@ class DBEnvV1(gym.Env):
                 new_index_size = 1
 
             if self.current_budget:
-                assert b_to_mb(self.current_storage_consumption) <= self.current_budget, f"Storage consumption exceeds budget: {b_to_mb(self.current_storage_consumption)} > {self.current_budget}"
+                assert b_to_mb(self.current_storage_consumption) <= self.current_budget, (
+                    "Storage consumption exceeds budget: "
+                    f"{b_to_mb(self.current_storage_consumption)} "
+                    f" > {self.current_budget}"
+                )
 
         environment_state = {
             "action_status": self.action_manager.current_action_status,

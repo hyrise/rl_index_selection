@@ -1,11 +1,11 @@
 import copy
 import logging
 import random
-import pickle
-
-import numpy as np
 
 import embedding_utils as embedding_utils
+import numpy as np
+from workload_embedder import WorkloadEmbedder
+
 from index_selection_evaluation.selection.candidate_generation import (
     candidates_per_query,
     syntactically_relevant_indexes,
@@ -14,7 +14,6 @@ from index_selection_evaluation.selection.cost_evaluation import CostEvaluation
 from index_selection_evaluation.selection.dbms.postgres_dbms import PostgresDatabaseConnector
 from index_selection_evaluation.selection.utils import get_utilized_indexes
 from index_selection_evaluation.selection.workload import Query, Workload
-from workload_embedder import WorkloadEmbedder
 
 QUERY_PATH = "query_files"
 
@@ -91,14 +90,16 @@ class WorkloadGenerator(object):
 
             self.unknown_query_classes = frozenset(self.unknown_query_classes) - self.excluded_query_classes
             missing_classes = config["unknown_queries"] - len(self.unknown_query_classes)
-            self.unknown_query_classes = self.unknown_query_classes | frozenset(self.rnd.sample(self.available_query_classes - frozenset(self.unknown_query_classes), missing_classes))
-            assert(len(self.unknown_query_classes) == config["unknown_queries"])
+            self.unknown_query_classes = self.unknown_query_classes | frozenset(
+                self.rnd.sample(self.available_query_classes - frozenset(self.unknown_query_classes), missing_classes)
+            )
+            assert len(self.unknown_query_classes) == config["unknown_queries"]
 
             self.known_query_classes = self.available_query_classes - frozenset(self.unknown_query_classes)
             embedder = None
 
             for query_class in self.excluded_query_classes:
-                assert(query_class not in self.unknown_query_classes)
+                assert query_class not in self.unknown_query_classes
 
             logging.critical(f"Global unknown query classes: {sorted(self.unknown_query_classes)}")
             logging.critical(f"Global known query classes: {sorted(self.known_query_classes)}")
@@ -119,7 +120,6 @@ class WorkloadGenerator(object):
                 == len(config["validation_testing"]["unknown_query_probabilities"])
                 == len(self.wl_testing)
             ), "Validation/Testing workloads length fail"
-
 
             # We are temporarily restricting the available query classes now to exclude certain classes for training
             original_available_query_classes = self.available_query_classes

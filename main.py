@@ -4,8 +4,9 @@ import logging
 import pickle
 import sys
 
-import gym_db  # noqa: F401
 from experiment import Experiment
+
+import gym_db  # noqa: F401
 from gym_db.common import EnvironmentType
 
 if __name__ == "__main__":

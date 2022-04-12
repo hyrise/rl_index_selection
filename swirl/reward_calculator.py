@@ -69,6 +69,7 @@ class RelativeDifferenceRelativeToStorageReward(RewardCalculator):
 
         return reward
 
+
 class DRLindaReward(RewardCalculator):
     def __init__(self):
         RewardCalculator.__init__(self)
