@@ -1,7 +1,7 @@
 import logging
 import random
 
-from bag_of_operators import BagOfOperators
+from .boo import BagOfOperators
 
 
 def which_queries_to_remove(plans, queries_to_remove, seed=None, excluded_query_classes=frozenset([])):

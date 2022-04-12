@@ -2,10 +2,9 @@ import copy
 import logging
 import random
 
-import embedding_utils as embedding_utils
 import numpy as np
-from workload_embedder import WorkloadEmbedder
 
+import swirl.embedding_utils as embedding_utils
 from index_selection_evaluation.selection.candidate_generation import (
     candidates_per_query,
     syntactically_relevant_indexes,
@@ -14,6 +13,8 @@ from index_selection_evaluation.selection.cost_evaluation import CostEvaluation
 from index_selection_evaluation.selection.dbms.postgres_dbms import PostgresDatabaseConnector
 from index_selection_evaluation.selection.utils import get_utilized_indexes
 from index_selection_evaluation.selection.workload import Query, Workload
+
+from .workload_embedder import WorkloadEmbedder
 
 QUERY_PATH = "query_files"
 

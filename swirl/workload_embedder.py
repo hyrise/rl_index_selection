@@ -1,12 +1,13 @@
 import logging
 
 import gensim
-from bag_of_operators import BagOfOperators
 from sklearn.decomposition import PCA
 
 from index_selection_evaluation.selection.cost_evaluation import CostEvaluation
 from index_selection_evaluation.selection.index import Index
 from index_selection_evaluation.selection.workload import Query
+
+from .boo import BagOfOperators
 
 
 class WorkloadEmbedder(object):

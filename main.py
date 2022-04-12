@@ -4,10 +4,9 @@ import logging
 import pickle
 import sys
 
-from experiment import Experiment
-
 import gym_db  # noqa: F401
 from gym_db.common import EnvironmentType
+from swirl.experiment import Experiment
 
 if __name__ == "__main__":
 
