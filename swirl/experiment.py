@@ -48,12 +48,6 @@ class Experiment(object):
         self.EXPERIMENT_RESULT_PATH = self.config["result_path"]
         self._create_experiment_folder()
 
-    # Introduced for dissertation evaluation. analying the schema changed index sizes...
-    def rebuild_action_storage_consumptions(self):
-        self.action_storage_consumptions = utils.predict_index_sizes(
-            self.globally_indexable_columns_flat, self.schema.database_name
-        )
-
     def prepare(self):
         self.schema = Schema(
             self.config["workload"]["benchmark"],
@@ -524,12 +518,6 @@ class Experiment(object):
                     assert model_performance["evaluated_workload"] not in self.evaluated_workloads
                     self.evaluated_workloads.add(model_performance["evaluated_workload"])
 
-                    # to avoid validation
-                    if run_type == "Validation":
-                        self.comparison_indexes["Extend"] |= frozenset([])
-                        self.comparison_performances[run_type]["Extend"][-1].append(1.0)
-                        continue
-
                     parameters = {
                         "budget_MB": model_performance["evaluated_workload"].budget,
                         "max_index_width": self.config["max_index_width"],
@@ -542,11 +530,6 @@ class Experiment(object):
                     self.comparison_indexes["Extend"] |= frozenset(indexes)
 
                     self.comparison_performances[run_type]["Extend"][-1].append(e.final_share)
-
-                # assert np.mean(self.comparison_performances[run_type]["Extend"][-1]) < 92, (
-                #     f"Extend performance is > 92% but {np.mean(self.comparison_performances[run_type]['Extend'][-1])}"
-                #     ", please choose another random_seed."
-                # )
 
     def _compare_db2advis(self):
         for model_performances_outer, run_type in [self.test_model(self.model), self.validate_model(self.model)]:
