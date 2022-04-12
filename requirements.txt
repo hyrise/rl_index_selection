@@ -1,0 +1,9 @@
+black==22.3.0
+flake8==3.8.4
+gym==0.17.3
+isort==5.6.4
+numpy==1.19.4
+psycopg2-binary==2.8.6
+sklearn==0.0
+tensorboard==1.15.0
+tensorflow==1.15.0
