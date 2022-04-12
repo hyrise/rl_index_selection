@@ -1,0 +1,8 @@
+[submodule "stable_baselines"]
+	path = stable_baselines
+	url = git@github.com:Bensk1/stable-baselines.git
+	branch = action_mask_453
+[submodule "index_selection_evaluation"]
+	path = index_selection_evaluation
+	url = git@github.com:hyrise/index_selection_evaluation.git
+	branch = rl_index_selection
