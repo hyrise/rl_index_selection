@@ -9,7 +9,7 @@ If you have any questions regarding the paper, please contact Jan Kossmann via j
 
 The provided setup was tested with Python 3.7.9 (due to Tensorflow version dependencies) and PostgreSQL (12.5) only. The presented implementation requires several python libraries that are listed in the requirements.txt. Furthermore, there are two submodules:
 
-1. [StableBaselines v2](https://github.com/Bensk1/stable-baselines/tree/3f076e672fb80ad028d44e7f64503140d1961646) for the RL algorithms. The submodule includes a modified version to enable [invalid action masking](https://github.com/hill-a/stable-baselines/pull/453).
+1. [StableBaselines v2](https://github.com/Bensk1/stable-baselines/tree/action_mask_453) for the RL algorithms. The submodule includes a [modified version](https://github.com/hill-a/stable-baselines/pull/453) to enable [invalid action masking](https://arxiv.org/abs/2006.14171).
 2. The [index selection evaluation platform](https://github.com/hyrise/index_selection_evaluation/tree/rl_index_selection) in a slightly modified version to simplify RL experiments. The platform handles hypothetical indexes and data generation and loading (adding `-O2` to the Makefiles of the tpch-kit and tpcds-kit might speedup this process, see Miscellaneous below).
 
 Please refer to the install script and the [README](https://github.com/hyrise/index_selection_evaluation/blob/rl_index_selection/README.md) of the index selection evaluation platform before proceeding.
