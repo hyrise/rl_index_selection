@@ -164,7 +164,12 @@ class Experiment(object):
 
         self._write_report()
 
-        logging.critical(f"Finished training of ID {self.id}")
+        logging.critical(
+            (
+                f"Finished training of ID {self.id}. Report can be found at "
+                f"./{self.experiment_folder_path}/report_ID_{self.id}.txt"
+            )
+        )
 
     def _get_wl_budgets_from_model_perfs(self, perfs):
         wl_budgets = []
@@ -674,6 +679,7 @@ class Experiment(object):
             return env
 
         self.set_random_seed(self.config["random_seed"])
+
         return _init
 
     def _set_sb_version_specific_methods(self):
