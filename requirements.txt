@@ -1,5 +1,6 @@
 black==22.3.0
 flake8==3.8.4
+gensim==3.8.3
 gym==0.17.3
 isort==5.6.4
 numpy==1.19.4
