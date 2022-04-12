@@ -1,20 +1,20 @@
 {
-  "id": "TPCH_Test_Experiment",
-  "description": "Just a TPCH Test Experiment",
+  "id": "TPCDS_Test_Experiment",
+  "description": "Just a TPCDS Test Experiment",
   "gym_version": 1,
-  "timesteps": 20000,
+  "timesteps": 100000,
   "random_seed": 60,
-  "parallel_environments": 1,
+  "parallel_environments": 16,
   "pickle_cost_estimation_caches": false,
   "action_manager": "MultiColumnIndexActionManager",
-  "observation_manager": "SingleColumnIndexObservationManager",
+  "observation_manager": "SingleColumnIndexPlanEmbeddingObservationManagerWithCost",
   "reward_calculator": "RelativeDifferenceRelativeToStorageReward",
   "max_steps_per_episode": 200,
-  "validation_frequency": 1000,
+  "validation_frequency": 4000,
   "filter_utilized_columns": false,
   "max_index_width": 3,
-  "reenable_indexes": true,
   "result_path": "experiment_results",
+  "reenable_indexes": false,
   "workload_embedder": {
     "type": "PlanEmbedderLSIBOW",
     "representation_size": 50
@@ -37,23 +37,24 @@
     }
   },
   "workload": {
-    "benchmark": "TPCH",
+    "benchmark": "TPCDS",
     "scale_factor": 10,
-    "size": 19,
+    "size": 50,
     "varying_frequencies": true,
-    "training_instances": 5000,
+    "training_instances": 4000,
     "validation_testing": {
-      "number_of_workloads": 5,
-      "unknown_query_probabilities": [0.0]
+      "number_of_workloads": 10,
+      "unknown_query_probabilities": [0.2]
     },
-    "similar_workloads": false,
-    "excluded_query_classes": [2,17,20],
-    "unknown_queries": 0
+    "similar_workloads": true,
+    "query_class_change_frequency": 3,
+    "excluded_query_classes": [4, 6, 9, 10, 11, 32, 35, 41, 95],
+    "unknown_queries": 14
   },
   "comparison_algorithms": ["db2advis"],
   "budgets": {
     "training": false,
-    "validation_and_testing": [500, 1000, 1500, 2500, 3500, 5000, 6500, 8000, 10000]
+    "validation_and_testing": [500, 1000, 1500, 2500, 3500, 5000, 6500, 8000, 10000, 12500]
   },
   "column_filters": {
     "TableNumRowsFilter": 10000
