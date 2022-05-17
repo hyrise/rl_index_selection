@@ -19,10 +19,10 @@ Please refer to the install script and the [README](https://github.com/hyrise/in
 
 ```
 git submodule update --init --recursive # Fetch submodules
-python3.7 -m venv venv					# Create virtualenv
-source venv/bin/activate				# Activate virtualenv
-pip install -r requirements.txt			# Install requirements with pip
-python -m swirl experiments/tpch.json	# Run TPC-H example experiment
+python3.7 -m venv venv                  # Create virtualenv
+source venv/bin/activate                # Activate virtualenv
+pip install -r requirements.txt         # Install requirements with pip
+python -m swirl experiments/tpch.json   # Run TPC-H example experiment
 ```
 
 Experiments can be controlled with the (mostly self-explanatory) json-file. There is another example file in the _experiments_ folder. Results will be written into a configurable folder, for the test experiments it is set to _experiment\_results_. If you want to use tensoboard for logging, create the necessary folder: `mkdir tensor_log`.
