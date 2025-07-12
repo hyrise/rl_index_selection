@@ -31,6 +31,8 @@ The index selection evaluation platform allows generating and loading TPC-H and 
 
 For descriptions of the components and functioning, consult our [EDBT paper](https://openproceedings.org/2022/conf/edbt/paper-37.pdf). Query files were reduced to 10 queries per template for efficiency reasons.
 
+When using the non-default gym environment (not db_env_v1) to experiment without invalid action masking (v2) or DRLindex (v3), make sure to use the current config in terms of, e.g., action_manager, reward_calculator, and observation_manager.
+
 
 ## DRLinda as an RL-based Competitor
 
